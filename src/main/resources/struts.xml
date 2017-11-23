@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+
+                <!--G T M D   S T R U T S-->
+    <package name="login_register" extends="struts-default" namespace="/">
+        <action name="login" class="action.login_register.loginAction">
+            <result name="success">/main.jsp</result>
+            <result name="input">/login.jsp</result>
+        </action>
+
+        <action name="register" class="action.login_register.registerAction">
+            <result name="success">/login.jsp</result>
+            <result name="input">/register.jsp</result>
+        </action>
+
+        <action name="locale_default" class="action.login_register.LocaleDefaultAction">
+            <result name="success">/login.jsp</result>
+        </action>
+
+        <action name="create" class="action.login_register.CreateImageAction">
+            <result name="success" type="stream">
+                <param name="contentType">image.jpeg</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+    </package>
+
+    <package name="file" extends="struts-default" namespace="/">
+        <action name="upload_num" class="action.file.UploadFileNumAction">
+            <result name="success">/upload.jsp</result>
+        </action>
+        <action name="upload_file" class="action.file.UploadFileAction">
+            <interceptor-ref name="fileUpload">
+                <param name="allowedTypes">image/jpeg,image/png</param>
+                <param name="maximumSize">5242800</param>
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack"/>
+            <result name="success" type="chain">update</result>
+            <result name="input">/upload.jsp</result>
+            <param name="root">ablum/</param>
+        </action>
+        <action name="download" class="action.file.DownloadFileAction">
+            <result type="stream">
+                <param name="contentType">${contentType}</param>
+                <param name="contentDisposition">filename="${downFileName}"</param>
+                <param name="inputName">targetFile</param>
+                <param name="bufferSize">4068</param>
+            </result>
+            <result name="input">/ablum.jsp</result>
+        </action>
+        <action name="update" class="action.file.UpdateAblumAction">
+            <result name="success">/main.jsp</result>
+        </action>
+    </package>
+
+    <package name="check" extends="struts-default" namespace="/">
+        <action name="check" class="action.ablum.CheckAblumAction">
+            <result name="success">/ablum.jsp</result>
+        </action>
+    </package>
+
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="true"/>
+    <constant name="struts.custom.i18n.resources" value="i18n"/>
+
+</struts>
