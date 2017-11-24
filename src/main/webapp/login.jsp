@@ -1,5 +1,6 @@
 <%@ page import="com.opensymphony.xwork2.ActionContext" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="sb" uri="/struts-bootstrap-tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: MurphySL
@@ -34,57 +35,218 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 
-<html>
+<html lang="zh-CN">
 <head>
     <title><s:text name="login_welcome"/></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/normalize.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <sb:head/>
+    <style>
+        body {
+            background-color: #eee;
+            overflow: hidden;
+        }
+        canvas {
+            background-color: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
 </head>
-<body style="color: blue">
 
-<s:actionerror/>
-<s:form action="login" method="POST">
-    <table>
-        <tr>
-            <th>
-                <s:text name="login_welcome"/>
-            </th>
-        </tr>
-        <tr><s:textfield name="email" key="email"/></tr>
-        <tr><s:password name="password" key="password"/></tr>
-        <tr>
-            <td><s:text name="login_type"/></td>
-            <td>
-                <select name="type">
-                    <option value="user"><s:text name="login_type_user"/></option>
-                    <option value="admin"><s:text name="login_type_admin"/></option>
-                </select>
-            </td>
-        </tr>
-        <tr><s:submit key="submit"/></tr>
-    </table>
-</s:form>
+<body>
 
-<a href="register.jsp"><s:text name="login_register"/></a>
+<canvas id="canvas" style="position: absolute;z-index: 2"></canvas>
 
-<%--<td><img src="../71ec8a90-b15f-48e6-954e-a5f672999aef.png" width="100px" height="100px"></td>--%>
+<div class="container" style="width: 400px; margin: auto; position:absolute; z-index: 3; left: 0;right: 0;top: 140px; bottom: 0; ">
+    <s:actionerror theme="bootstrap"/>
+    <s:form action="login" method="POST" theme="bootstrap" cssClass="form-horizontal" key="login_welcome">
+        <s:textfield name="email" key="email"/>
+        <s:password name="password" key="password"/>
+        <s:text name="login_type"/>
+        <s:select list="#{'user':'用户','admin':'管理员'}" name="type" />
+        <%--<s:select name="type" class="form-control">
+            <option value="user"><s:text name="login_type_user"/></option>
+            <option value="admin"><s:text name="login_type_admin"/></option>
+        </s:select>--%>
 
+        <s:submit key="submit" cssClass="btn btn-primary btn-lg"/>
+    </s:form>
+</div>
+
+<a href="register.jsp" class="btn btn-default" style="position: absolute; z-index: 4; left: 50px; top: 20px;"><s:text name="login_register"/></a>
 
 <%-- GTMD EL OGNL--%>
 <%
     String local = String.valueOf(ActionContext.getContext().getLocale());
-    if(local == null || local.equals("zh_CN")){
+    if (local == null || local.equals("zh_CN")) {
 %>
-<div>
-    <a href="locale_default?request_locale=en_US">ENGLISH</a>
+<div style="position: absolute; z-index:4; right: 50px; top: 20px;">
+    <a href="locale_default?request_locale=en_US" class="btn btn-default">ENGLISH</a>
 </div>
 <%
-    }else{
+} else {
 %>
-<div>
-    <a href="locale_default?request_locale=zh_CN">中文</a>
+<div style="position: absolute; z-index:4; right: 50px; top: 20px;">
+    <a href="locale_default?request_locale=zh_CN" class="btn btn-default">中文</a>
 </div>
 <%
     }
 %>
+
+
+
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var cw = canvas.width = window.innerWidth,
+        cx = cw / 2;
+    var ch = canvas.height = window.innerHeight,
+        cy = ch / 2;
+
+    ctx.fillStyle = "#000";
+    var linesNum = 16;
+    var linesRy = [];
+    var requestId = null;
+
+    function Line(flag) {
+        this.flag = flag;
+        this.a = {};
+        this.b = {};
+        if (flag == "v") {
+            this.a.y = 0;
+            this.b.y = ch;
+            this.a.x = randomIntFromInterval(0, ch);
+            this.b.x = randomIntFromInterval(0, ch);
+        } else if (flag == "h") {
+            this.a.x = 0;
+            this.b.x = cw;
+            this.a.y = randomIntFromInterval(0, cw);
+            this.b.y = randomIntFromInterval(0, cw);
+        }
+        this.va = randomIntFromInterval(25, 100) / 100;
+        this.vb = randomIntFromInterval(25, 100) / 100;
+
+        this.draw = function() {
+            ctx.strokeStyle = "#ccc";
+            ctx.beginPath();
+            ctx.moveTo(this.a.x, this.a.y);
+            ctx.lineTo(this.b.x, this.b.y);
+            ctx.stroke();
+        }
+
+        this.update = function() {
+            if (this.flag == "v") {
+                this.a.x += this.va;
+                this.b.x += this.vb;
+            } else if (flag == "h") {
+                this.a.y += this.va;
+                this.b.y += this.vb;
+            }
+
+            this.edges();
+        }
+
+        this.edges = function() {
+            if (this.flag == "v") {
+                if (this.a.x < 0 || this.a.x > cw) {
+                    this.va *= -1;
+                }
+                if (this.b.x < 0 || this.b.x > cw) {
+                    this.vb *= -1;
+                }
+            } else if (flag == "h") {
+                if (this.a.y < 0 || this.a.y > ch) {
+                    this.va *= -1;
+                }
+                if (this.b.y < 0 || this.b.y > ch) {
+                    this.vb *= -1;
+                }
+            }
+        }
+
+    }
+
+    for (var i = 0; i < linesNum; i++) {
+        var flag = i % 2 == 0 ? "h" : "v";
+        var l = new Line(flag);
+        linesRy.push(l);
+    }
+
+    function Draw() {
+        requestId = window.requestAnimationFrame(Draw);
+        ctx.clearRect(0, 0, cw, ch);
+
+        for (var i = 0; i < linesRy.length; i++) {
+            var l = linesRy[i];
+            l.draw();
+            l.update();
+        }
+        for (var i = 0; i < linesRy.length; i++) {
+            var l = linesRy[i];
+            for (var j = i + 1; j < linesRy.length; j++) {
+                var l1 = linesRy[j]
+                Intersect2lines(l, l1);
+            }
+        }
+    }
+
+    function Init() {
+        linesRy.length = 0;
+        for (var i = 0; i < linesNum; i++) {
+            var flag = i % 2 == 0 ? "h" : "v";
+            var l = new Line(flag);
+            linesRy.push(l);
+        }
+
+        if (requestId) {
+            window.cancelAnimationFrame(requestId);
+            requestId = null;
+        }
+
+        cw = canvas.width = window.innerWidth,
+            cx = cw / 2;
+        ch = canvas.height = window.innerHeight,
+            cy = ch / 2;
+
+        Draw();
+    };
+
+    setTimeout(function() {
+        Init();
+
+        addEventListener('resize', Init, false);
+    }, 15);
+
+    function Intersect2lines(l1, l2) {
+        var p1 = l1.a,
+            p2 = l1.b,
+            p3 = l2.a,
+            p4 = l2.b;
+        var denominator = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);
+        var ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denominator;
+        var ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denominator;
+        var x = p1.x + ua * (p2.x - p1.x);
+        var y = p1.y + ua * (p2.y - p1.y);
+        if (ua > 0 && ub > 0) {
+            markPoint({
+                x: x,
+                y: y
+            })
+        }
+    }
+
+    function markPoint(p) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+
+    function randomIntFromInterval(mn, mx) {
+        return ~~(Math.random() * (mx - mn + 1) + mn);
+    }</script>
 
 </body>
 </html>

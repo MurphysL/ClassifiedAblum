@@ -18,6 +18,11 @@
           <element id="library" level="project" name="Maven: org.tensorflow:tensorflow:1.4.0" />
           <element id="library" level="project" name="Maven: org.tensorflow:libtensorflow:1.4.0" />
           <element id="library" level="project" name="Maven: org.tensorflow:libtensorflow_jni:1.4.0" />
+          <element id="library" level="project" name="Maven: com.jgeppert.struts2.bootstrap:struts2-bootstrap-plugin:2.0.0" />
+          <element id="library" level="project" name="Maven: org.apache.velocity:velocity:1.5" />
+          <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.1" />
+          <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.1" />
+          <element id="library" level="project" name="Maven: oro:oro:2.0.8" />
         </element>
       </element>
       <element id="directory" name="META-INF">

@@ -38,7 +38,7 @@ public class TensorFlowInferenceInterface {
     private List<String> fetchNames = new ArrayList<String>();
     
     /** fetchTensors */
-    private List<Tensor<?>> fetchTensors = new ArrayList<>();
+    private List<Tensor> fetchTensors = new ArrayList<>();
     
     /** runStats */
     private RunStats runStats;

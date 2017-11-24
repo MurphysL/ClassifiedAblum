@@ -3,14 +3,14 @@
 <%--
   Created by IntelliJ IDEA.
   User: MurphySL
-  Date: 2017/11/22
-  Time: 10:31
+  Date: 2017/11/23
+  Time: 21:54
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title><s:property value="tname"/></title>
+    <title><s:text name="admin_welcome"><s:param value="%{#session.user.username}"/> </s:text></title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="css/normalize.css">
@@ -34,24 +34,30 @@
 
 <div class="container" style="width: 800px; margin: auto; position:absolute; z-index: 3; left: 0;right: 0;top: 140px; bottom: 0; ">
     <s:actionerror theme="bootstrap"/>
+
     <table class="table table-striped">
         <tr>
-            <th><s:text name="pic"/></th>
-            <th><s:text name="pic_size"/></th>
-            <th><s:text name="pic_date"/></th>
-            <th><s:text name="pic_download"/></th>
+            <th>
+                <s:text name="admin_unum"/>
+            </th>
+            <th>
+                <s:text name="admin_username"/>
+            </th>
+            <th>
+                <s:text name="email"/>
+            </th>
         </tr>
-        <s:iterator value="#pics" status="st" var="pic">
-            <tr <s:if test="#st.odd">style="background-color: #bbbbbb"</s:if> >
-                <td><img src="<s:property value="#pic.path"/> " class="img-thumbnail"></td>
-                <td><s:property value="#pic.size"/></td>
-                <td><s:property value="#pic.uploadDate"/></td>
-                <td><a class="btn btn-default" href="download.action?inputPath=<s:property value="#pic.path"/>&contentType=image/png&downFileName=<s:property value="#pic.pname"/>"><s:text name="pic_download"/></a> </td>
+        <s:iterator value="#session.users" var="user" status="st">
+            <tr>
+                <td><s:property value="#user.uid"/></td>
+                <td><s:property value="#user.username"/></td>
+                <td><s:property value="#user.email"/> </td>
             </tr>
         </s:iterator>
     </table>
 
 </div>
+
 
 <script>
     var canvas = document.getElementById("canvas");
@@ -202,5 +208,6 @@
     function randomIntFromInterval(mn, mx) {
         return ~~(Math.random() * (mx - mn + 1) + mn);
     }</script>
+
 </body>
 </html>

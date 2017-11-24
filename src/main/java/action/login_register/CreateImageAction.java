@@ -15,9 +15,9 @@ import java.util.Random;
 public class CreateImageAction extends ActionSupport{
     private ByteArrayInputStream inputStream;
 
-    private static int WIDTH = 60;
+    private static int WIDTH = 120;
 
-    private static int HEIGHT = 20;
+    private static int HEIGHT = 40;
 
     public ByteArrayInputStream getInputStream()
     {
@@ -76,17 +76,17 @@ public class CreateImageAction extends ActionSupport{
     {
         g.setColor(Color.BLACK);
 
-        g.setFont(new Font(null, Font.ITALIC | Font.BOLD, 18));
+        g.setFont(new Font(null, Font.ITALIC | Font.BOLD, 36));
 
         // 在不同的高度上输出验证码的每个字符
 
-        g.drawString("" + rands.charAt(0), 1, 17);
+        g.drawString("" + rands.charAt(0), 2, 34);
 
-        g.drawString("" + rands.charAt(1), 16, 15);
+        g.drawString("" + rands.charAt(1), 32, 30);
 
-        g.drawString("" + rands.charAt(2), 31, 18);
+        g.drawString("" + rands.charAt(2), 62, 36);
 
-        g.drawString("" + rands.charAt(3), 46, 16);
+        g.drawString("" + rands.charAt(3), 92, 32);
 
         System.out.println(rands);
 

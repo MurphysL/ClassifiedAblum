@@ -9,6 +9,8 @@
                 <!--G T M D   S T R U T S-->
     <package name="login_register" extends="struts-default" namespace="/">
         <action name="login" class="action.login_register.loginAction">
+            <result name="userSuccess">/main.jsp</result>
+            <result name="adminSuccess">/admin_main.jsp</result>
             <result name="success">/main.jsp</result>
             <result name="input">/login.jsp</result>
         </action>

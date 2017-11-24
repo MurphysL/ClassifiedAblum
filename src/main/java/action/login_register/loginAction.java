@@ -13,6 +13,9 @@ import java.util.regex.Pattern;
 
 public class loginAction extends ActionSupport{
 
+    private static final String USER = "user";
+    private static final String ADMIN = "admin";
+
     private String email;
     private String password;
     private String type;
@@ -68,10 +71,21 @@ public class loginAction extends ActionSupport{
         ActionContext.getContext().getSession().put("types", types);
     }
 
+    private void queryAllUser(){
+        UserDao userDao = new UserDao();
+        List<User> users = userDao.selectUserList();
+        ActionContext.getContext().getSession().put("users", users);
+    }
+
     @Override
     public String execute() throws Exception {
         ActionContext.getContext().getSession().put("user", user);
-        queryUserTypes();
-        return super.execute();
+        if(user.getType().equals(USER)){
+            queryUserTypes();
+            return "userSuccess";
+        }else{
+            queryAllUser();
+            return "adminSuccess";
+        }
     }
 }
