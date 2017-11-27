@@ -33,6 +33,8 @@
 
 <canvas id="canvas" style="position: absolute;z-index: 2"></canvas>
 
+<a href="create_type_default.action" class="btn btn-primary btn-lg" style="position: absolute;z-index: 3; right: 20px; top: 20px;"><s:text name="type_create"/></a>
+
 <div class="container" style="width: 800px; margin: auto; position:absolute; z-index: 3; left: 0;right: 0;top: 140px; bottom: 0; ">
     <s:actionerror theme="bootstrap"/>
 
@@ -44,6 +46,9 @@
             <th>
                 <s:text name="main_num"/>
             </th>
+            <th>
+                <s:text name="type_delete"/>
+            </th>
         </tr>
         <s:iterator value="#session.types" var="type" status="st">
             <tr <s:if test="#st.odd">style="background-color: #bbbbbb;"</s:if> >
@@ -53,13 +58,14 @@
                     </s:a>
                 </td>
                 <td><s:property value="#type.value"/></td>
+                <td> <a class="btn btn-default" href="delete_type.action?tname=<s:property value="#type.key"/>"><s:text name="type_delete"/></a> </td>
             </tr>
         </s:iterator>
     </table>
 
     <div style="width:100px; margin: 0 auto;">
         <s:form action="upload_num" method="GET" theme="bootstrap" cssClass="form-horizontal">
-            <s:textfield key="upload_num" name="num" label="上传数量" />
+            <s:textfield key="upload_num" name="num"/>
             <s:submit key="submit" cssClass="btn btn-default"/>
         </s:form>
     </div>

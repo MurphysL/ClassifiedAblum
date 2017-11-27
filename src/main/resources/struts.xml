@@ -38,7 +38,7 @@
         </action>
         <action name="upload_file" class="action.file.UploadFileAction">
             <interceptor-ref name="fileUpload">
-                <param name="allowedTypes">image/jpeg,image/png</param>
+                <param name="allowedTypes">image/jpeg,image/png,text/html</param>
                 <param name="maximumSize">5242800</param>
             </interceptor-ref>
             <interceptor-ref name="defaultStack"/>
@@ -46,10 +46,13 @@
             <result name="input">/upload.jsp</result>
             <param name="root">ablum/</param>
         </action>
+        <action name="delete" class="action.file.DeleteFileAction">
+            <result name="success" type="stream">check.action</result>
+        </action>
         <action name="download" class="action.file.DownloadFileAction">
             <result type="stream">
                 <param name="contentType">${contentType}</param>
-                <param name="contentDisposition">filename="${downFileName}"</param>
+                <param name="contentDisposition">attachment;filename="${downFileName}"</param>
                 <param name="inputName">targetFile</param>
                 <param name="bufferSize">4068</param>
             </result>
@@ -60,9 +63,21 @@
         </action>
     </package>
 
-    <package name="check" extends="struts-default" namespace="/">
+    <package name="detail" extends="struts-default" namespace="/">
         <action name="check" class="action.ablum.CheckAblumAction">
             <result name="success">/ablum.jsp</result>
+        </action>
+    </package>
+
+    <package name="type" extends="struts-default" namespace="/">
+        <action name="create_type_default" class="action.type.CreateTypeDefaultAction">
+            <result name="success">/create_type.jsp</result>
+        </action>
+        <action name="create_type" class="action.type.CreateTypeAction">
+            <result name="success">/main.jsp</result>
+        </action>
+        <action name="delete_type" class="action.type.DeleteTypeAction">
+            <result name="success">/main.jsp</result>
         </action>
     </package>
 

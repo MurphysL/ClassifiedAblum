@@ -13,19 +13,17 @@ import java.util.List;
 
 public class TypeDao {
     private static final String TABLE_NAME = "type";
-    private static final String INSERT_FILEDS = " tname, updateDate ";
-    private static final String QUERY_FILEDS = " tid, tname, updateDate ";
+    private static final String INSERT_FILEDS = " tname, updateDate, label ";
+    private static final String QUERY_FILEDS = " tid, tname, updateDate, label ";
 
-    public void insertType(String tname){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String now = format.format(System.currentTimeMillis());
-        String sql = "INSERT " + TABLE_NAME + "(" + INSERT_FILEDS + ")" + " VALUE " + "(?, ?);";
+    public void insertType(Type type){
+        String sql = "INSERT " + TABLE_NAME + "(" + INSERT_FILEDS + ")" + " VALUE " + "(?, ?, ?);";
         try {
             Connection connection = ConnUtil.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, tname);
-            ps.setString(2, now);
-
+            ps.setString(1, type.getTname());
+            ps.setString(2, type.getUpdateDate());
+            ps.setString(3, type.getLabel());
             ps.executeUpdate();
             ps.close();
         } catch (ClassNotFoundException | SQLException e) {
@@ -64,7 +62,7 @@ public class TypeDao {
         try {
             Connection connection = ConnUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.getResultSet();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet != null){
                 while (resultSet.next()){
@@ -72,6 +70,7 @@ public class TypeDao {
                     type.setTid(resultSet.getInt("tid"));
                     type.setTname(resultSet.getString("tname"));
                     type.setUpdateDate(resultSet.getString("updateDate"));
+                    type.setLabel(resultSet.getString("label"));
                     types.add(type);
                 }
             }
@@ -81,7 +80,15 @@ public class TypeDao {
         return types;
     }
 
-
-
+    public void deleteTypeByTname(String tname){
+        String sql = "DELETE FROM " + TABLE_NAME + " WHERE tname = ?";
+        try {
+            PreparedStatement preparedStatement = ConnUtil.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, tname);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

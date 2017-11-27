@@ -68,12 +68,11 @@ public class PicDao {
 
     /**
      * 获取 uid 对应用户的所有图片类别
-     * @param uid 用户id
-     * @return 图片类别及数量
+     * @param types 图片与数量Map
+     * @param uid 用户ID
      */
-    public Map<String, Integer> queryUserPicType(int uid){
+    public void queryUserPicType(Map<String, Integer> types, int uid){
         String sql = "SELECT tname FROM " + TABLE_NAME + " WHERE uid = ?;";
-        Map<String , Integer> types = new HashMap<>();
         try {
             Connection connection = ConnUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -96,7 +95,33 @@ public class PicDao {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-        return types;
+    }
+
+    public List<Pic> queryPicList(int uid, String tname){
+        String sql  = "SELECT  * FROM " + TABLE_NAME  + " WHERE uid = ? AND tname = ?";
+        List<Pic> pics = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = ConnUtil.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, uid);
+            preparedStatement.setString(2, tname);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                Pic pic = new Pic();
+                pic.setPid(resultSet.getInt("pid"));
+                pic.setTid(resultSet.getInt("tid"));
+                pic.setUid(resultSet.getInt("uid"));
+                pic.setUsername(resultSet.getString("username"));
+                pic.setTname(resultSet.getString("tname"));
+                pic.setPname(resultSet.getString("pname"));
+                pic.setSize(resultSet.getInt("size"));
+                pic.setUploadDate(resultSet.getString("uploadDate"));
+                pics.add(pic);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return pics;
     }
 
     /**
@@ -131,6 +156,17 @@ public class PicDao {
             e.printStackTrace();
         }
         return pics;
+    }
+
+    public void deletePicById(int pid){
+        String sql = "DELETE FROM " + TABLE_NAME + " WHERE pid = ?";
+        try {
+            PreparedStatement preparedStatement = ConnUtil.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, pid);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Pic> getPicList(int uid, String tname){

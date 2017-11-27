@@ -67,10 +67,6 @@
         <s:password name="password" key="password"/>
         <s:text name="login_type"/>
         <s:select list="#{'user':'用户','admin':'管理员'}" name="type" />
-        <%--<s:select name="type" class="form-control">
-            <option value="user"><s:text name="login_type_user"/></option>
-            <option value="admin"><s:text name="login_type_admin"/></option>
-        </s:select>--%>
 
         <s:submit key="submit" cssClass="btn btn-primary btn-lg"/>
     </s:form>

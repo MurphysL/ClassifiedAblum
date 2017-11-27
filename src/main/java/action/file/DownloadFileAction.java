@@ -3,6 +3,9 @@ package action.file;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.ServletActionContext;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class DownloadFileAction extends ActionSupport {
@@ -37,5 +40,17 @@ public class DownloadFileAction extends ActionSupport {
 
     public InputStream getTargetFile(){
         return ServletActionContext.getServletContext().getResourceAsStream(inputPath);
+    }
+
+    @Override
+    public String execute() throws Exception{
+        /*BufferedInputStream fis =  new BufferedInputStream(getTargetFile());
+        FileOutputStream fos = new FileOutputStream("e://" + downFileName);
+        byte[] cache = new byte[1024];
+        int len;
+        while((len = fis.read(cache)) != -1){
+            fos.write(cache, 0, len);
+        }*/
+        return SUCCESS;
     }
 }

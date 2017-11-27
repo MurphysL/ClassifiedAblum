@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +37,8 @@ public class UploadFileAction extends ActionSupport {
     private static final String INPUT_NODE = "image_batch"; // 输入节点名称
     private static final String OUTPUT_NODE = "final"; // 输出结点名称
     private static final String KEEP_PROB = "keep_prob"; // 下降速率
+
+    private HashMap<Integer, Character> words = new HashMap<>();
 
     public List<File> getPic() {
         return pic;
@@ -70,7 +73,8 @@ public class UploadFileAction extends ActionSupport {
     }
 
     private int classify(File file){
-        TensorFlowInferenceInterface tensorflowInterface = new TensorFlowInferenceInterface("H://java/handwriting.pd", "imageType");
+        String path = ServletActionContext.getServletContext().getRealPath("/model");
+        TensorFlowInferenceInterface tensorflowInterface = new TensorFlowInferenceInterface(path + "/handwriting.pd", "imageType");
 
         float[] img = getImagePixel(file);
 
@@ -115,16 +119,16 @@ public class UploadFileAction extends ActionSupport {
         return floatValues;
     }
 
-    private void uploadPic(String fileName, String path, int lable, int size){
+    private void uploadPic(String fileName, String path, int lable, int size, String tname){
         PicDao dao = new PicDao();
         Pic pic = new Pic();
         User user = (User) ActionContext.getContext().getSession().get("user");
         pic.setUid(user.getUid());
-        pic.setTid(1);
+        pic.setTid(lable);
         pic.setUsername(user.getUsername());
         pic.setSize(size);
         pic.setPname(fileName);
-        pic.setTname("airplane");
+        pic.setTname(tname);
         pic.setPath(path);
 
         dao.insertPic(pic);
@@ -172,10 +176,12 @@ public class UploadFileAction extends ActionSupport {
 
     @Override
     public String execute() throws Exception {
+        initWords();
         for(int i = 0;i < pic.size() ;i ++){
             String newName = UUID.randomUUID() + picFileName.get(i).substring(picFileName.get(i).lastIndexOf("."));
 
             int label = classify(pic.get(0));
+            Character word = words.get(label);
 
             String newDir = "G:\\JavaWorkspace\\JavaEE\\ClassifiedAblum\\src\\main\\webapp\\" + root + label;
             String newAbsolutePath = newDir + "/" +  newName;
@@ -188,9 +194,47 @@ public class UploadFileAction extends ActionSupport {
             int size = copyFile(pic.get(0), newAbsolutePath);
             copyFile(pic.get(0), tomcatAbsolutePath);
 
-            uploadPic(newName, savePath, label, size);
+            uploadPic(newName, savePath, label, size, word.toString());
         }
 
         return super.execute();
+    }
+
+    private void initWords() {
+        words.put(71, '五');
+        words.put(108, '代');
+        words.put(155, '作');
+        words.put(391, '北');
+        words.put(408, '华');
+        words.put(444, '原');
+        words.put(749, '大');
+        words.put(848, '学');
+        words.put(1034, '序');
+        words.put(1138, '性');
+
+        words.put(1231, '成');
+        words.put(1375, '据');
+        words.put(1458, '操');
+        words.put(1487, '数');
+        words.put(1592, '术');
+        words.put(1596, '机');
+        words.put(1620, '构');
+        words.put(1856, '法');
+        words.put(2109, '物');
+        words.put(2168, '理');
+        words.put(2303, '省');
+        words.put(2438, '程');
+        words.put(2508, '算');
+        words.put(2550, '系');
+        words.put(2579, '线');
+        words.put(2581, '组');
+        words.put(2592, '结');
+        words.put(2600, '统');
+        words.put(2627, '编');
+        words.put(2650, '美');
+        words.put(2841, '英');
+        words.put(3061, '计');
+        words.put(3093, '译');
+        words.put(3108, '语');
     }
 }

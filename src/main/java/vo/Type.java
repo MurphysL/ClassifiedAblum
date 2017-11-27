@@ -4,6 +4,15 @@ public class Type {
     private int tid;
     private String tname;
     private String updateDate;
+    private String label;
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
     public int getTid() {
         return tid;
@@ -27,5 +36,15 @@ public class Type {
 
     public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Type{" +
+                "tid=" + tid +
+                ", tname='" + tname + '\'' +
+                ", updateDate='" + updateDate + '\'' +
+                ", label='" + label + '\'' +
+                '}';
     }
 }

@@ -40,13 +40,15 @@
             <th><s:text name="pic_size"/></th>
             <th><s:text name="pic_date"/></th>
             <th><s:text name="pic_download"/></th>
+            <th><s:text name="pic_delete"/> </th>
         </tr>
         <s:iterator value="#pics" status="st" var="pic">
             <tr <s:if test="#st.odd">style="background-color: #bbbbbb"</s:if> >
                 <td><img src="<s:property value="#pic.path"/> " class="img-thumbnail"></td>
                 <td><s:property value="#pic.size"/></td>
                 <td><s:property value="#pic.uploadDate"/></td>
-                <td><a class="btn btn-default" href="download.action?inputPath=<s:property value="#pic.path"/>&contentType=image/png&downFileName=<s:property value="#pic.pname"/>"><s:text name="pic_download"/></a> </td>
+                <td><a class="btn btn-default" href="download.action?inputPath=<s:property value="#pic.path"/>&downFileName=<s:property value="#pic.pname"/>&contentType=image/png"><s:text name="pic_download"/></a> </td>
+                <td><a class="btn btn-default" href="delete.action?path=<s:property value="#pic.path"/>&pid=<s:property value="#pic.pid"/>"><s:text name="pic_delete"/></a> </td>
             </tr>
         </s:iterator>
     </table>

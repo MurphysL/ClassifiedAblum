@@ -4,6 +4,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import dao.PicDao;
 import dao.UserDao;
+import service.TypeService;
 import vo.Pic;
 import vo.User;
 
@@ -66,8 +67,8 @@ public class loginAction extends ActionSupport{
     }
 
     private void queryUserTypes(){
-        PicDao picDao = new PicDao();
-        Map<String, Integer> types =  picDao.queryUserPicType(user.getUid());
+        TypeService service = new TypeService();
+        Map<String , Integer> types = service.queryAllTypes(user.getUid());
         ActionContext.getContext().getSession().put("types", types);
     }
 

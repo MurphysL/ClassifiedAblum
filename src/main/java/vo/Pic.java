@@ -10,7 +10,31 @@ public class Pic {
     private int size;
     private String uploadDate;
     private String path;
+    private String label;
 
+    @Override
+    public String toString() {
+        return "Pic{" +
+                "pid=" + pid +
+                ", tid=" + tid +
+                ", uid=" + uid +
+                ", username='" + username + '\'' +
+                ", tname='" + tname + '\'' +
+                ", pname='" + pname + '\'' +
+                ", size=" + size +
+                ", uploadDate='" + uploadDate + '\'' +
+                ", path='" + path + '\'' +
+                ", label='" + label + '\'' +
+                '}';
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
     public String getPath() {
         return path;
@@ -84,18 +108,4 @@ public class Pic {
         this.uploadDate = uploadDate;
     }
 
-    @Override
-    public String toString() {
-        return "Pic{" +
-                "pid=" + pid +
-                ", tid=" + tid +
-                ", uid=" + uid +
-                ", username='" + username + '\'' +
-                ", tname='" + tname + '\'' +
-                ", pname='" + pname + '\'' +
-                ", size=" + size +
-                ", uploadDate='" + uploadDate + '\'' +
-                ", path='" + path + '\'' +
-                '}';
-    }
 }
